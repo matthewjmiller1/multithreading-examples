@@ -6,9 +6,11 @@
 # http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
 #IDIR =../include
-CC=gcc
+#CC=gcc
+CC=clang
 #CFLAGS=-I$(IDIR)
 CFLAGS=-Wall -Werror -g
+COPTS=-fsanitize=address -g
 
 ODIR=obj
 
@@ -21,14 +23,14 @@ _OBJ = $(NAME).o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) $(COPTS) -c -o $@ $< $(CFLAGS)
 
 $(NAME): $(OBJ)
-	gcc -o $@ $^ $(CFLAGS) $(LIBS)
+	$(CC) $(COPTS) -o $@ $^ $(CFLAGS) $(LIBS)
 
 all: $(NAME)
 
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core 
+	rm -f $(ODIR)/*.o *~ core
