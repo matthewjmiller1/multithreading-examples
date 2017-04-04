@@ -17,7 +17,7 @@ ODIR=obj
 #LIBS=-lm
 LIBS=
 
-NAME = c_pthreads
+NAME = counting
 
 _OBJ = $(NAME).o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
