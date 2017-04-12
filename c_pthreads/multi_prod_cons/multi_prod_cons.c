@@ -81,10 +81,10 @@ producer_fn(void *ctx)
 int
 main(int argc, char **argv)
 {
-    static const uint8_t PRODUCER_TREAD_COUNT = 5;
-    static const uint8_t CONSUMER_TREAD_COUNT = 10;
-    pthread_t producer_threads[PRODUCER_TREAD_COUNT];
-    pthread_t consumer_threads[CONSUMER_TREAD_COUNT];
+    static const uint8_t PRODUCER_THREAD_COUNT = 5;
+    static const uint8_t CONSUMER_THREAD_COUNT = 10;
+    pthread_t producer_threads[PRODUCER_THREAD_COUNT];
+    pthread_t consumer_threads[CONSUMER_THREAD_COUNT];
     uint8_t i;
 
     srand(42);
@@ -92,29 +92,29 @@ main(int argc, char **argv)
     pthread_mutex_init(&mtx, NULL);
     pthread_cond_init(&cv, NULL);
 
-    for (i = 0; i < PRODUCER_TREAD_COUNT; ++i) {
+    for (i = 0; i < PRODUCER_THREAD_COUNT; ++i) {
         pthread_create(&producer_threads[i], NULL, producer_fn,
                        (void *) (uintptr_t) (i + 1));
     }
 
-    for (i = 0; i < CONSUMER_TREAD_COUNT; ++i) {
+    for (i = 0; i < CONSUMER_THREAD_COUNT; ++i) {
         pthread_create(&consumer_threads[i], NULL, consumer_fn,
                        (void *) (uintptr_t) (i + 1));
     }
 
-    for (i = 0; i < PRODUCER_TREAD_COUNT; ++i) {
+    for (i = 0; i < PRODUCER_THREAD_COUNT; ++i) {
         pthread_join(producer_threads[i], NULL);
     }
 
     printf("%s: %u producer threads finished\n", __func__,
-           PRODUCER_TREAD_COUNT);
+           PRODUCER_THREAD_COUNT);
 
-    for (i = 0; i < CONSUMER_TREAD_COUNT; ++i) {
+    for (i = 0; i < CONSUMER_THREAD_COUNT; ++i) {
         pthread_join(consumer_threads[i], NULL);
     }
 
     printf("%s: %u consumer threads finished\n", __func__,
-           CONSUMER_TREAD_COUNT);
+           CONSUMER_THREAD_COUNT);
 
     printf("%s: total=%u, cur_count=%u\n", __func__, total_count, cur_count);
 
