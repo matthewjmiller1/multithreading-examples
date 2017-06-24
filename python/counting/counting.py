@@ -65,17 +65,19 @@ def counting_fn(thread_ctx):
         tprint("finishing thread {}".format(id))
 
 THREAD_COUNT = 5
-#ctx = CommonCtx(50)
-ctx = CommonCtx(50, True)
+ctx = CommonCtx(50)
 
+thread_list = []
 for i in range(THREAD_COUNT):
     thread_ctx = ThreadCtx((i + 1), ctx)
     t = threading.Thread(target=counting_fn, args=(thread_ctx,))
+    t.daemon = True
     t.start()
+    thread_list.append((t, thread_ctx))
 
 with ctx.cv:
     ctx.printer_tid = 0
-    for ctx.cur_count in range(1, ctx.total_count):
+    for ctx.cur_count in range(1, (ctx.total_count + 1)):
         ctx.printer_tid = \
             1 if (ctx.printer_tid >= THREAD_COUNT) else (ctx.printer_tid + 1)
         ctx.cur_count_handled = False
@@ -83,5 +85,13 @@ with ctx.cv:
         ctx.cv.notify_all()
         while (not ctx.cur_count_handled):
             ctx.cv.wait()
+
+try:
+    for (t, t_ctx) in thread_list:
+        t.join(1.0)
+        if (t.is_alive()):
+            tprint("thread {} did not finish".format(t_ctx.id))
+except KeyboardInterrupt:
+    tprint("Caught keyboard interrupt")
 
 tprint("{} threads finished".format(THREAD_COUNT))
