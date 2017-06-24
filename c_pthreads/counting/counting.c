@@ -7,8 +7,9 @@
 struct common_ctx_t_ {
     uint8_t printer_tid;
     uint8_t cur_count;
-    uint8_t total_count;
     bool cur_count_handled;
+
+    uint8_t total_count;
     bool do_debug;
 
     pthread_mutex_t mtx;
