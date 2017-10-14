@@ -40,7 +40,7 @@ counting_fn(void *arg)
             printf("%s: (thread %u) cur_count=%u\n", __func__, id,
                    ctx->cur_count);
             ctx->cur_count_handled = true;
-            pthread_cond_signal(&(ctx->cv));
+            pthread_cond_broadcast(&(ctx->cv));
         }
         if (ctx->cur_count >= ctx->total_count) {
             break;
