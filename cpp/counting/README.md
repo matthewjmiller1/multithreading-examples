@@ -2,6 +2,6 @@
 ## Manually
 ```
 cmake -S . -B build
-cmake --build build -- -j3
+cmake --build build
 bin/counting
 ```
